@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.geometry.Rectangle2D?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.ProgressBar?>
+<?import javafx.scene.control.Slider?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.media.MediaView?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+<?import javafx.scene.text.TextFlow?>
+
+<BorderPane fx:id="mainPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.adanali.javafx.javafxmediaplayer.MediaPlayerController">
+   <top>
+      <HBox prefHeight="28.0" prefWidth="600.0" BorderPane.alignment="CENTER">
+         <children>
+            <MenuBar prefHeight="27.0" prefWidth="94.0">
+              <menus>
+                <Menu mnemonicParsing="false" text="File">
+                  <items>
+                        <MenuItem mnemonicParsing="false" onAction="#openNewFile" text="Open" />
+                    <MenuItem mnemonicParsing="false" onAction="#closePlayer" text="Close" />
+                  </items>
+                </Menu>
+                <Menu mnemonicParsing="false" text="Help">
+                  <items>
+                    <MenuItem mnemonicParsing="false" onAction="#about" text="About" />
+                  </items>
+                </Menu>
+              </menus>
+               <HBox.margin>
+                  <Insets />
+               </HBox.margin>
+            </MenuBar>
+            <TextFlow prefHeight="51.0" prefWidth="507.0" style="-fx-background-color: #D3D3D3;" textAlignment="CENTER" HBox.hgrow="ALWAYS">
+               <children>
+                  <Text fx:id="fileNameText" strokeType="OUTSIDE" strokeWidth="0.0" text="File Name" wrappingWidth="135.8621826171875">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Text>
+               </children>
+               <HBox.margin>
+                  <Insets bottom="1.0" right="1.0" top="1.0" />
+               </HBox.margin>
+            </TextFlow>
+         </children>
+      </HBox>
+   </top>
+   <center>
+      <StackPane fx:id="myStackPane" prefHeight="150.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+         <children>
+            <MediaView fx:id="mediaView" fitHeight="300.0" fitWidth="300.0" nodeOrientation="INHERIT" StackPane.alignment="CENTER">
+               <viewport>
+                  <Rectangle2D />
+               </viewport>
+            </MediaView>
+         </children>
+      </StackPane>
+   </center>
+   <bottom>
+      <VBox prefHeight="65.0" prefWidth="600.0" BorderPane.alignment="CENTER">
+         <children>
+            <HBox fx:id="controlBar" prefHeight="31.0" prefWidth="600.0">
+               <children>
+                  <ProgressBar fx:id="videoProgressBar" prefHeight="19.0" prefWidth="603.0" progress="0.0" HBox.hgrow="ALWAYS">
+                     <HBox.margin>
+                        <Insets left="10.0" />
+                     </HBox.margin></ProgressBar>
+               </children>
+            </HBox>
+            <HBox alignment="CENTER" prefHeight="46.0" prefWidth="600.0" VBox.vgrow="ALWAYS">
+               <children>
+                  <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" HBox.hgrow="ALWAYS">
+                     <children>
+                        <Button mnemonicParsing="false" text="⏪">
+                           <HBox.margin>
+                              <Insets left="158.0" />
+                           </HBox.margin></Button>
+                        <Button fx:id="toggleButton" maxHeight="38.0" maxWidth="40.0" minHeight="38.0" minWidth="40.0" mnemonicParsing="false" onAction="#toggleMedia" prefHeight="38.0" prefWidth="40.0" text="⏸">
+                           <HBox.margin>
+                              <Insets bottom="3.0" left="10.0" top="3.0" />
+                           </HBox.margin>
+                           <font>
+                              <Font size="17.0" />
+                           </font>
+                        </Button>
+                        <Button mnemonicParsing="false" text="⏩">
+                           <HBox.margin>
+                              <Insets left="10.0" />
+                           </HBox.margin></Button>
+                     </children>
+                  </HBox>
+                  <ComboBox fx:id="playbackSpeedComboBox" prefWidth="150.0" HBox.hgrow="NEVER">
+                     <HBox.margin>
+                        <Insets right="10.0" />
+                     </HBox.margin>
+                  </ComboBox>
+               </children>
+            </HBox>
+         </children>
+      </VBox>
+   </bottom>
+   <right>
+      <Slider fx:id="volumeSlider" blockIncrement="5.0" minorTickCount="5" orientation="VERTICAL" prefHeight="100.0" prefWidth="35.0" showTickLabels="true" showTickMarks="true" value="50.0" BorderPane.alignment="CENTER">
+         <BorderPane.margin>
+            <Insets bottom="5.0" top="5.0" />
+         </BorderPane.margin></Slider>
+   </right>
+</BorderPane>

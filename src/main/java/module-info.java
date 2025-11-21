@@ -1,8 +1,8 @@
 module com.adanali.javafx.javafxmediaplayer {
     requires javafx.controls;
     requires javafx.fxml;
+    requires javafx.media;
 
-
-    opens com.adanali.javafx.javafxmediaplayer to javafx.fxml;
     exports com.adanali.javafx.javafxmediaplayer;
+    opens com.adanali.javafx.javafxmediaplayer to javafx.graphics, javafx.fxml;
 }
