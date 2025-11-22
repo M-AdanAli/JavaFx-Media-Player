@@ -74,7 +74,9 @@ public class MediaPlayerController implements Initializable {
     }
 
     public void openNewFile(){
-        mediaPlayer.dispose();
+        if (mediaPlayer != null) {
+            mediaPlayer.dispose();
+        }
         Stage currentStage = (Stage) mainPane.getScene().getWindow();
         mediaFile = fileChooser.showOpenDialog(currentStage);
         if (mediaFile != null) {
