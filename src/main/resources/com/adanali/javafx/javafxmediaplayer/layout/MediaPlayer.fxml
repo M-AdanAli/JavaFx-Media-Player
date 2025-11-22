@@ -7,7 +7,6 @@
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
-<?import javafx.scene.control.ProgressBar?>
 <?import javafx.scene.control.Slider?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
@@ -71,17 +70,18 @@
          <children>
             <HBox fx:id="controlBar" prefHeight="31.0" prefWidth="600.0">
                <children>
-                  <ProgressBar fx:id="videoProgressBar" prefHeight="19.0" prefWidth="603.0" progress="0.0" HBox.hgrow="ALWAYS">
+                  <Slider fx:id="mediaSlider" showTickMarks="true" styleClass="media-slider" HBox.hgrow="ALWAYS">
                      <HBox.margin>
-                        <Insets left="10.0" />
-                     </HBox.margin></ProgressBar>
+                        <Insets left="10.0" right="10.0" />
+                     </HBox.margin>
+                  </Slider>
                </children>
             </HBox>
             <HBox alignment="CENTER" prefHeight="46.0" prefWidth="600.0" VBox.vgrow="ALWAYS">
                <children>
                   <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" HBox.hgrow="ALWAYS">
                      <children>
-                        <Button mnemonicParsing="false" text="⏪">
+                        <Button mnemonicParsing="false" onAction="#reverseMedia" text="⏪">
                            <HBox.margin>
                               <Insets left="158.0" />
                            </HBox.margin></Button>
@@ -93,7 +93,7 @@
                               <Font size="17.0" />
                            </font>
                         </Button>
-                        <Button mnemonicParsing="false" text="⏩">
+                        <Button mnemonicParsing="false" onAction="#fastForwardMedia" text="⏩">
                            <HBox.margin>
                               <Insets left="10.0" />
                            </HBox.margin></Button>
@@ -110,7 +110,7 @@
       </VBox>
    </bottom>
    <right>
-      <Slider fx:id="volumeSlider" blockIncrement="5.0" minorTickCount="5" orientation="VERTICAL" prefHeight="100.0" prefWidth="35.0" showTickLabels="true" showTickMarks="true" value="50.0" BorderPane.alignment="CENTER">
+      <Slider fx:id="volumeSlider" blockIncrement="5.0" minorTickCount="5" orientation="VERTICAL" prefHeight="100.0" prefWidth="35.0" showTickLabels="true" showTickMarks="true" styleClass="volume-slider" value="50.0" BorderPane.alignment="CENTER">
          <BorderPane.margin>
             <Insets bottom="5.0" top="5.0" />
          </BorderPane.margin></Slider>

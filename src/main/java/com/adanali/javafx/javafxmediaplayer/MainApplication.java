@@ -6,7 +6,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
-import javafx.scene.media.Media;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 public class MainApplication extends Application {
@@ -24,6 +24,10 @@ public class MainApplication extends Application {
         controller.setApp(this);
 
         Scene scene = new Scene(root);
+        scene.getStylesheets().add(getClass().getResource("layout/media-player.css").toExternalForm());
+
+        Image icon = new Image(getClass().getResourceAsStream("assets/Media-Player-Icon.png"));
+        stage.getIcons().add(icon);
         stage.setTitle("Media Player");
         stage.setScene(scene);
         stage.show();

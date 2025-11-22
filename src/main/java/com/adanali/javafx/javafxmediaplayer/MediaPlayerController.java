@@ -5,7 +5,6 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
@@ -13,6 +12,7 @@ import javafx.scene.media.MediaView;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
 import java.io.File;
 import java.net.URL;
@@ -21,7 +21,6 @@ import java.util.ResourceBundle;
 public class MediaPlayerController implements Initializable {
 
     private Application app;
-    private Stage stage;
     @FXML
     private BorderPane mainPane;
     @FXML
@@ -33,11 +32,9 @@ public class MediaPlayerController implements Initializable {
     @FXML
     private Slider volumeSlider;
     @FXML
-    private ProgressBar videoProgressBar;
-    @FXML
     private ComboBox<String> playbackSpeedComboBox;
     @FXML
-    private HBox controlBar;
+    private Slider mediaSlider;
     @FXML
     private Button toggleButton;
 
@@ -54,11 +51,8 @@ public class MediaPlayerController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         // making sure that video resizes with the window
-        mediaView.fitWidthProperty().bind(myStackPane.widthProperty());
-        mediaView.fitHeightProperty().bind(myStackPane.heightProperty());
-
-        // making sure that progress bar resizes with the window
-        videoProgressBar.prefWidthProperty().bind(controlBar.widthProperty().subtract(20));
+        mediaView.fitWidthProperty().bind(myStackPane.widthProperty().subtract(10));
+        mediaView.fitHeightProperty().bind(myStackPane.heightProperty().subtract(20));
 
         // Setting up the file chooser
         fileChooser = new FileChooser();
@@ -79,6 +73,9 @@ public class MediaPlayerController implements Initializable {
             isMediaFileSelected = true;
             updateTitleToFileName();
             setupMediaPlayer();
+            setupVolumeSlider();
+            setupMediaSeekSlider();
+            wireUpSpeedComboBox();
         }
     }
 
@@ -94,6 +91,62 @@ public class MediaPlayerController implements Initializable {
             mediaPlayer = new MediaPlayer(media);
             mediaPlayer.setAutoPlay(true);
             mediaView.setMediaPlayer(mediaPlayer);
+        }
+    }
+
+    public void setupVolumeSlider(){
+        if (isMediaFileSelected){
+            volumeSlider.setValue(mediaPlayer.getVolume() * 100);
+            volumeSlider.valueProperty().addListener((obs, oldVal, newVal) -> {
+                mediaPlayer.setVolume(newVal.doubleValue() / 100);
+            });
+        }
+    }
+
+    public void setupMediaSeekSlider(){
+        if (isMediaFileSelected) {
+            // Setting the Media Slider Range on Media load
+            mediaPlayer.setOnReady(() -> {
+                mediaSlider.setMin(0);
+                mediaSlider.setMax(mediaPlayer.getTotalDuration().toSeconds());
+            });
+
+            // Syncing the Media Slider with the Media Play
+            mediaPlayer.currentTimeProperty().addListener((obs, oldTime, newTime) -> {
+                if (!mediaSlider.isValueChanging()) // Making sure the user is not seeking the Media Slider
+                    mediaSlider.setValue(newTime.toSeconds());
+            });
+
+            // Seeking on User Drag
+            mediaSlider.valueChangingProperty().addListener((obs, wasChanging, changing) -> {
+                if (!changing) { // User finished dragging
+                    mediaPlayer.seek(Duration.seconds(mediaSlider.getValue()));
+                }
+            });
+
+            mediaSlider.setOnMousePressed(event -> {
+                double mouseX = event.getX();
+                double width = mediaSlider.getWidth();
+                double max = mediaSlider.getMax();
+                double min = mediaSlider.getMin();
+
+                // Calculate click position as a value from min to max
+                double value = min + (mouseX / width) * (max - min);
+                mediaSlider.setValue(value);
+                mediaPlayer.seek(Duration.seconds(value));
+            });
+        }
+    }
+
+    public void wireUpSpeedComboBox(){
+        if (isMediaFileSelected) {
+            playbackSpeedComboBox.getItems().addAll("0.5x", "1x", "1.5x", "2x");
+            playbackSpeedComboBox.setValue("1x"); // Set default
+
+            playbackSpeedComboBox.valueProperty().addListener((obs, oldVal, newVal) -> {
+                double rate = Double.parseDouble(newVal.replace("x", ""));
+                mediaPlayer.setRate(rate);
+            });
         }
     }
 
@@ -115,13 +168,38 @@ public class MediaPlayerController implements Initializable {
         app.getHostServices().showDocument("https://github.com/M-AdanAli/JavaFx-Media-Player/blob/main/README.md");
     }
 
-    public void toggleMedia(){
-        if (toggleButton.getText().equals("⏸")){
-            mediaPlayer.pause();
-            toggleButton.setText("▶");
-        } else if (toggleButton.getText().equals("▶")) {
-            mediaPlayer.play();
-            toggleButton.setText("⏸");
+    public void reverseMedia(){
+        Duration currentTime = mediaPlayer.getCurrentTime();
+        Duration back = currentTime.subtract(Duration.seconds(5));
+
+        // Clamp to min duration
+        if (back.lessThan(Duration.ZERO)) {
+            back = Duration.ZERO;
         }
+        mediaPlayer.seek(back);
+    }
+
+    public void toggleMedia(){
+        if (isMediaFileSelected){
+            if (toggleButton.getText().equals("⏸")){
+                mediaPlayer.pause();
+                toggleButton.setText("▶");
+            } else if (toggleButton.getText().equals("▶")) {
+                mediaPlayer.play();
+                toggleButton.setText("⏸");
+            }
+        }
+    }
+
+    public void fastForwardMedia(){
+        Duration currentTime = mediaPlayer.getCurrentTime();
+        Duration totalDuration = mediaPlayer.getTotalDuration();
+        Duration forward = currentTime.add(Duration.seconds(5));
+
+        // Clamping to max duration
+        if (forward.greaterThan(totalDuration)) {
+            forward = totalDuration;
+        }
+        mediaPlayer.seek(forward);
     }
 }
