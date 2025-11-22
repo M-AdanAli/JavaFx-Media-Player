@@ -61,6 +61,12 @@ public class MediaPlayerController implements Initializable {
         fileChooser.getExtensionFilters().addAll(
                 new FileChooser.ExtensionFilter("Video Files", "*.mp4", "*.flv", "*.m4v", "*.fxm")
         );
+
+        // Added some Error Handling
+        mediaPlayer.setOnError(() -> {
+            Alert alert = new Alert(Alert.AlertType.ERROR, "Error: " + mediaPlayer.getError().getMessage());
+            alert.showAndWait();
+        });
     }
 
     public void setApp(Application app) {
@@ -68,7 +74,9 @@ public class MediaPlayerController implements Initializable {
     }
 
     public void openNewFile(){
-        mediaFile = fileChooser.showOpenDialog(new Stage());
+        mediaPlayer.dispose();
+        Stage currentStage = (Stage) mainPane.getScene().getWindow();
+        mediaFile = fileChooser.showOpenDialog(currentStage);
         if (mediaFile != null) {
             isMediaFileSelected = true;
             updateTitleToFileName();
@@ -169,14 +177,16 @@ public class MediaPlayerController implements Initializable {
     }
 
     public void reverseMedia(){
-        Duration currentTime = mediaPlayer.getCurrentTime();
-        Duration back = currentTime.subtract(Duration.seconds(5));
+        if (isMediaFileSelected) {
+            Duration currentTime = mediaPlayer.getCurrentTime();
+            Duration back = currentTime.subtract(Duration.seconds(5));
 
-        // Clamp to min duration
-        if (back.lessThan(Duration.ZERO)) {
-            back = Duration.ZERO;
+            // Clamp to min duration
+            if (back.lessThan(Duration.ZERO)) {
+                back = Duration.ZERO;
+            }
+            mediaPlayer.seek(back);
         }
-        mediaPlayer.seek(back);
     }
 
     public void toggleMedia(){
@@ -192,14 +202,16 @@ public class MediaPlayerController implements Initializable {
     }
 
     public void fastForwardMedia(){
-        Duration currentTime = mediaPlayer.getCurrentTime();
-        Duration totalDuration = mediaPlayer.getTotalDuration();
-        Duration forward = currentTime.add(Duration.seconds(5));
+        if (isMediaFileSelected){
+            Duration currentTime = mediaPlayer.getCurrentTime();
+            Duration totalDuration = mediaPlayer.getTotalDuration();
+            Duration forward = currentTime.add(Duration.seconds(5));
 
-        // Clamping to max duration
-        if (forward.greaterThan(totalDuration)) {
-            forward = totalDuration;
+            // Clamping to max duration
+            if (forward.greaterThan(totalDuration)) {
+                forward = totalDuration;
+            }
+            mediaPlayer.seek(forward);
         }
-        mediaPlayer.seek(forward);
     }
 }
