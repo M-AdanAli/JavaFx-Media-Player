@@ -61,12 +61,6 @@ public class MediaPlayerController implements Initializable {
         fileChooser.getExtensionFilters().addAll(
                 new FileChooser.ExtensionFilter("Video Files", "*.mp4", "*.flv", "*.m4v", "*.fxm")
         );
-
-        // Added some Error Handling
-        mediaPlayer.setOnError(() -> {
-            Alert alert = new Alert(Alert.AlertType.ERROR, "Error: " + mediaPlayer.getError().getMessage());
-            alert.showAndWait();
-        });
     }
 
     public void setApp(Application app) {
@@ -101,6 +95,12 @@ public class MediaPlayerController implements Initializable {
             mediaPlayer = new MediaPlayer(media);
             mediaPlayer.setAutoPlay(true);
             mediaView.setMediaPlayer(mediaPlayer);
+
+            // Added some Error Handling
+            mediaPlayer.setOnError(() -> {
+                Alert alert = new Alert(Alert.AlertType.ERROR, "Error: " + mediaPlayer.getError().getMessage());
+                alert.showAndWait();
+            });
         }
     }
 
