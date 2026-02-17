@@ -21,7 +21,7 @@
    <top>
       <HBox prefHeight="28.0" prefWidth="600.0" BorderPane.alignment="CENTER">
          <children>
-            <MenuBar prefHeight="27.0" prefWidth="94.0">
+            <MenuBar prefHeight="32.0" prefWidth="132.0">
               <menus>
                 <Menu mnemonicParsing="false" text="File">
                   <items>

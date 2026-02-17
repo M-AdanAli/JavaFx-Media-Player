@@ -61,6 +61,7 @@ public class MediaPlayerController implements Initializable {
         fileChooser.getExtensionFilters().addAll(
                 new FileChooser.ExtensionFilter("Video Files", "*.mp4", "*.flv", "*.m4v", "*.fxm")
         );
+        playbackSpeedComboBox.getItems().addAll("0.5x", "1x", "1.5x", "2x");
     }
 
     public void setApp(Application app) {
@@ -97,10 +98,18 @@ public class MediaPlayerController implements Initializable {
             mediaView.setMediaPlayer(mediaPlayer);
 
             // Added some Error Handling
-            mediaPlayer.setOnError(() -> {
-                Alert alert = new Alert(Alert.AlertType.ERROR, "Error: " + mediaPlayer.getError().getMessage());
-                alert.showAndWait();
+            media.setOnError(() -> {
+                showErrorAlert("Could not load media",
+                        "This video uses a format or codec that JavaFX cannot play.\n\n" +
+                                "Try re-exporting it as H.264 video with AAC audio in an MP4 container.");
             });
+
+            mediaPlayer.setOnError(() -> {
+                showErrorAlert("Playback error",
+                        "There was a problem playing this file.\n\n" +
+                                "Details:\n" + mediaPlayer.getError().getMessage());
+            });
+
         }
     }
 
@@ -150,7 +159,6 @@ public class MediaPlayerController implements Initializable {
 
     public void wireUpSpeedComboBox(){
         if (isMediaFileSelected) {
-            playbackSpeedComboBox.getItems().addAll("0.5x", "1x", "1.5x", "2x");
             playbackSpeedComboBox.setValue("1x"); // Set default
 
             playbackSpeedComboBox.valueProperty().addListener((obs, oldVal, newVal) -> {
@@ -215,5 +223,12 @@ public class MediaPlayerController implements Initializable {
             }
             mediaPlayer.seek(forward);
         }
+    }
+    private void showErrorAlert(String header, String content) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Error");
+        alert.setHeaderText(header);
+        alert.setContentText(content);
+        alert.showAndWait();
     }
 }
