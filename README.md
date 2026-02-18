@@ -51,7 +51,7 @@ git clone https://github.com/M-AdanAli/JavaFx-Media-Player.git
 - For direct contact, open an issue or reach out via [EMAIL](mailto:imadanirfan@gmail.com).
 
 ### Demo
-Demo video: Soon...
+Demo video: [Demo Here!](https://www.linkedin.com/posts/adanali_core-java-javafx-ugcPost-7429435203934294016-hARu?utm_source=share&utm_medium=member_desktop&rcm=ACoAAFZNme4BpcMV5wJmpprSqaBoBv3bJfSUM58)
 
 ### Future Enhancements
 - Implement dynamic colored track fill on sliders to visually differentiate played vs. unplayed media.
@@ -62,7 +62,7 @@ Demo video: Soon...
 - Add drag-and-drop file open support.
 
 ---
-
+Author : [Adan Ali](https://github.com/M-AdanAli)
 Thank you for checking out the JavaFx Media Player project! Contributions and feedback are welcome.
 
 ---
